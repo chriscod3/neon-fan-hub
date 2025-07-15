@@ -1,6 +1,6 @@
-
 import { TrendingUp, Users, Radio, Music, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useTwitchSubscribers } from '@/hooks/useTwitchSubscribers';
 
 export function StatsTab() {
   const [stats, setStats] = useState({
@@ -15,6 +15,8 @@ export function StatsTab() {
     twitch: 0,
     spotify: 0
   });
+
+  const { subscribers, isLoading: subsLoading } = useTwitchSubscribers();
 
   useEffect(() => {
     // Animate counter on mount
@@ -137,6 +139,21 @@ export function StatsTab() {
           <div className="text-4xl font-bold text-white mb-3 relative z-10">
             {formatNumber(animatedStats.twitch)}
           </div>
+          
+          {/* Subscriber Count */}
+          <div className="mb-3 relative z-10">
+            <div className="flex items-center space-x-2 text-purple-300">
+              <Users className="w-4 h-4" />
+              <span className="font-medium">
+                {subsLoading ? (
+                  <span className="animate-pulse">Loading...</span>
+                ) : (
+                  `${formatNumber(subscribers)} subscribers`
+                )}
+              </span>
+            </div>
+          </div>
+          
           <div className="flex items-center space-x-2 text-green-400 relative z-10">
             <TrendingUp className="w-4 h-4" />
             <span className="font-medium">+5K this week</span>
