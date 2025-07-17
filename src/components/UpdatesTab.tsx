@@ -1,381 +1,323 @@
 
-import { Play, Radio, Eye, TrendingUp, Heart, Sparkles, Calendar, Clock, Star, Users, MessageCircle, Share2, Zap, Music, Video, Image, Mic, Globe, Bell, Activity, ArrowRight, ChevronDown, Dot, Plus, Filter, Search, Rss, Wifi, Signal } from 'lucide-react';
+import { Play, Radio, Eye, TrendingUp, Heart, Sparkles, Calendar, Clock, Star, Users, MessageCircle, Share2, Zap, Music, Video, Image, Mic, Globe, Bell, Activity, ArrowRight, ChevronDown, Dot, Plus, Filter, Search, Rss, Wifi, Signal, Terminal, Database, Cpu, HardDrive, NetworkIcon as Network, MonitorSpeaker, Radar, Waves, Pulse, BarChart3, LineChart, PieChart, AlertTriangle, CheckCircle, XCircle, Loader, Gauge } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { EnhancedCard } from '@/components/EnhancedCard';
 
 export function UpdatesTab() {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [liveViewers, setLiveViewers] = useState(2300);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [notifications, setNotifications] = useState(3);
+  const [systemStatus, setSystemStatus] = useState('OPERATIONAL');
+  const [dataStreams, setDataStreams] = useState(0);
+  const [activeConnections, setActiveConnections] = useState(127);
+  const [cpuUsage, setCpuUsage] = useState(65);
+  const [networkActivity, setNetworkActivity] = useState(85);
 
   useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+      setDataStreams(prev => prev + Math.floor(Math.random() * 5));
+      setActiveConnections(prev => prev + Math.floor(Math.random() * 3 - 1));
+      setCpuUsage(prev => Math.max(20, Math.min(95, prev + Math.floor(Math.random() * 10 - 5))));
+      setNetworkActivity(prev => Math.max(30, Math.min(100, prev + Math.floor(Math.random() * 15 - 7))));
+    }, 2000);
     return () => clearInterval(timer);
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setLiveViewers(prev => prev + Math.floor(Math.random() * 10 - 5));
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const categories = [
-    { id: 'all', name: 'All Updates', icon: Rss, count: 24 },
-    { id: 'live', name: 'Live', icon: Radio, count: 1 },
-    { id: 'music', name: 'Music', icon: Music, count: 8 },
-    { id: 'social', name: 'Social', icon: Globe, count: 12 },
-    { id: 'announcements', name: 'News', icon: Bell, count: 3 }
+  const terminalLogs = [
+    { time: '14:23:45', type: 'INFO', message: 'New track uploaded to Spotify' },
+    { time: '14:22:12', type: 'SUCCESS', message: 'YouTube stream started successfully' },
+    { time: '14:21:33', type: 'WARNING', message: 'High traffic detected on Instagram' },
+    { time: '14:20:15', type: 'INFO', message: 'Twitch chat moderation active' },
+    { time: '14:19:42', type: 'SUCCESS', message: 'Twitter post published' },
+    { time: '14:18:27', type: 'INFO', message: 'TikTok video processing complete' }
   ];
 
-  const liveStreams = [
-    {
-      id: 1,
-      platform: 'Twitch',
-      title: 'Gaming with the Squad',
-      game: 'Call of Duty: Warzone',
-      viewers: liveViewers,
-      duration: '2:34:12',
-      thumbnail: 'gaming-stream',
-      status: 'live'
-    },
-    {
-      id: 2,
-      platform: 'Instagram',
-      title: 'Studio Session Preview',
-      viewers: 890,
-      duration: '0:15:30',
-      thumbnail: 'studio-session',
-      status: 'live'
+  const realTimeData = [
+    { platform: 'Twitch', status: 'LIVE', viewers: 2847, trend: '+12%' },
+    { platform: 'YouTube', status: 'ACTIVE', subscribers: '1.2M', trend: '+5%' },
+    { platform: 'Instagram', status: 'ACTIVE', followers: '850K', trend: '+8%' },
+    { platform: 'Twitter', status: 'ACTIVE', followers: '420K', trend: '+3%' },
+    { platform: 'TikTok', status: 'ACTIVE', followers: '2.1M', trend: '+15%' },
+    { platform: 'Spotify', status: 'STREAMING', listeners: '45K', trend: '+7%' }
+  ];
+
+  const alerts = [
+    { id: 1, type: 'critical', title: 'Server Load High', message: 'CPU usage above 90%', time: '2m ago' },
+    { id: 2, type: 'warning', title: 'Rate Limit Warning', message: 'Twitter API approaching limit', time: '5m ago' },
+    { id: 3, type: 'info', title: 'New Milestone', message: '1M total followers reached', time: '12m ago' }
+  ];
+
+  const getLogTypeColor = (type: string) => {
+    switch (type) {
+      case 'SUCCESS': return 'text-green-400';
+      case 'WARNING': return 'text-yellow-400';
+      case 'ERROR': return 'text-red-400';
+      default: return 'text-blue-400';
     }
-  ];
-
-  const recentUpdates = [
-    {
-      id: 1,
-      type: 'music-release',
-      platform: 'Spotify',
-      title: 'New Single: "Midnight Drive"',
-      description: 'The latest track from DDG is now streaming everywhere',
-      timestamp: new Date(Date.now() - 1000 * 60 * 30),
-      engagement: { plays: 45000, likes: 3200, shares: 890 },
-      priority: 'high',
-      media: 'audio'
-    },
-    {
-      id: 2,
-      type: 'collaboration',
-      platform: 'YouTube',
-      title: 'Collab Video with KSI',
-      description: 'Epic collaboration just dropped! Check out this crazy challenge video',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
-      engagement: { views: 234000, likes: 18500, comments: 4200 },
-      priority: 'high',
-      media: 'video'
-    },
-    {
-      id: 3,
-      type: 'announcement',
-      platform: 'Twitter',
-      title: 'Tour Dates Revealed!',
-      description: 'The wait is over! Tour dates for 2024 are finally here. Tickets go live Friday!',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 6),
-      engagement: { retweets: 12000, likes: 45000, replies: 8900 },
-      priority: 'high',
-      media: 'text'
-    },
-    {
-      id: 4,
-      type: 'social',
-      platform: 'Instagram',
-      title: 'Behind the Scenes',
-      description: 'Exclusive look at the music video shoot 📸',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 12),
-      engagement: { likes: 89000, comments: 2300, shares: 1200 },
-      priority: 'medium',
-      media: 'photo'
-    }
-  ];
-
-  const formatNumber = (num: number) => {
-    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
-    return num.toString();
   };
 
-  const formatTimeAgo = (date: Date) => {
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    
-    if (hours > 0) return `${hours}h ago`;
-    return `${minutes}m ago`;
-  };
-
-  const getPlatformColor = (platform: string) => {
-    const colors = {
-      'Twitch': 'from-purple-500 to-purple-600',
-      'YouTube': 'from-red-500 to-red-600',
-      'Instagram': 'from-pink-500 to-purple-500',
-      'Spotify': 'from-green-500 to-green-600',
-      'Twitter': 'from-blue-500 to-blue-600'
-    };
-    return colors[platform] || 'from-gray-500 to-gray-600';
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'LIVE': return 'text-red-400 animate-pulse';
+      case 'ACTIVE': return 'text-green-400';
+      case 'STREAMING': return 'text-purple-400';
+      default: return 'text-gray-400';
+    }
   };
 
   return (
-    <div className="space-y-6 pb-24">
-      {/* Dashboard Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Live Dashboard</h1>
-          <p className="text-gray-400">Real-time updates across all platforms</p>
-        </div>
-        
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2 bg-gray-800/60 backdrop-blur-sm px-4 py-2 rounded-lg border border-gray-700/50">
-            <Clock className="w-4 h-4 text-blue-400" />
-            <span className="text-white font-mono text-sm">
-              {currentTime.toLocaleTimeString()}
-            </span>
-          </div>
-          
-          <EnhancedCard className="p-3">
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <Bell className="w-5 h-5 text-yellow-400" />
-                {notifications > 0 && (
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs text-white font-bold">{notifications}</span>
-                  </div>
-                )}
-              </div>
-              <span className="text-white text-sm">Notifications</span>
+    <div className="min-h-screen bg-gray-950 text-green-400 font-mono pb-24 relative overflow-hidden">
+      {/* Matrix-style background effect */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px),
+            linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '20px 20px',
+          animation: 'matrix-scroll 20s linear infinite'
+        }} />
+      </div>
+
+      {/* Command Center Header */}
+      <div className="relative z-10 p-6 border-b border-green-500/30 bg-gray-900/50 backdrop-blur-sm">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-4">
+            <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+            <h1 className="text-2xl font-bold text-green-400 tracking-wider">
+              [DDG_COMMAND_CENTER_v2.1]
+            </h1>
+            <div className="text-green-400/70">
+              STATUS: <span className="text-green-400 font-bold">{systemStatus}</span>
             </div>
-          </EnhancedCard>
-        </div>
-      </div>
-
-      {/* Category Filters */}
-      <div className="flex space-x-3 overflow-x-auto scrollbar-hide pb-2">
-        {categories.map((category) => {
-          const Icon = category.icon;
-          const isActive = selectedCategory === category.id;
+          </div>
           
-          return (
-            <button
-              key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 whitespace-nowrap ${
-                isActive 
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/25' 
-                  : 'bg-gray-800/60 text-gray-300 hover:bg-gray-700/60 hover:text-white'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span className="font-medium">{category.name}</span>
-              <span className={`px-2 py-0.5 rounded-full text-xs ${
-                isActive ? 'bg-white/20' : 'bg-gray-600/50'
-              }`}>
-                {category.count}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Live Streams Section */}
-      <div className="space-y-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-          <h2 className="text-xl font-bold text-white">Currently Live</h2>
-          <div className="flex items-center space-x-1 bg-red-500/20 px-2 py-1 rounded-full">
-            <Signal className="w-3 h-3 text-red-400" />
-            <span className="text-xs text-red-400 font-medium">STREAMING</span>
+          <div className="flex items-center space-x-6 text-sm">
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4" />
+              <span>{currentTime.toLocaleTimeString()}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Database className="w-4 h-4" />
+              <span>STREAMS: {dataStreams}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Network className="w-4 h-4" />
+              <span>CONN: {activeConnections}</span>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {liveStreams.map((stream) => (
-            <EnhancedCard key={stream.id} className="p-0 overflow-hidden group">
-              <div className="relative aspect-video bg-gradient-to-br from-purple-900/50 to-pink-900/50">
-                {/* Live indicator */}
-                <div className="absolute top-3 left-3 flex items-center space-x-2 bg-red-500/90 backdrop-blur-sm px-3 py-1 rounded-full z-10">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                  <span className="text-white text-xs font-bold">LIVE</span>
-                </div>
+        {/* System Metrics Bar */}
+        <div className="grid grid-cols-4 gap-4 text-xs">
+          <div className="flex items-center space-x-2">
+            <Cpu className="w-3 h-3" />
+            <span>CPU:</span>
+            <div className="flex-1 bg-gray-800 rounded-full h-2">
+              <div 
+                className="bg-green-400 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${cpuUsage}%` }}
+              />
+            </div>
+            <span>{cpuUsage}%</span>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <HardDrive className="w-3 h-3" />
+            <span>DISK:</span>
+            <div className="flex-1 bg-gray-800 rounded-full h-2">
+              <div className="bg-green-400 h-2 rounded-full w-3/4" />
+            </div>
+            <span>72%</span>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Waves className="w-3 h-3" />
+            <span>NET:</span>
+            <div className="flex-1 bg-gray-800 rounded-full h-2">
+              <div 
+                className="bg-green-400 h-2 rounded-full transition-all duration-500"
+                style={{ width: `${networkActivity}%` }}
+              />
+            </div>
+            <span>{networkActivity}%</span>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Gauge className="w-3 h-3" />
+            <span>LOAD:</span>
+            <div className="flex-1 bg-gray-800 rounded-full h-2">
+              <div className="bg-yellow-400 h-2 rounded-full w-2/3" />
+            </div>
+            <span>65%</span>
+          </div>
+        </div>
+      </div>
 
-                {/* Viewer count */}
-                <div className="absolute top-3 right-3 flex items-center space-x-1 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-full">
-                  <Eye className="w-3 h-3 text-white" />
-                  <span className="text-white text-xs font-medium">{formatNumber(stream.viewers)}</span>
-                </div>
+      <div className="relative z-10 p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Live Platform Monitoring */}
+        <div className="lg:col-span-2 space-y-4">
+          <div className="flex items-center space-x-2 mb-4">
+            <Radar className="w-5 h-5 text-green-400 animate-spin" style={{ animationDuration: '3s' }} />
+            <h2 className="text-lg font-bold text-green-400">[PLATFORM_MONITOR]</h2>
+          </div>
 
-                {/* Duration */}
-                <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm px-2 py-1 rounded">
-                  <span className="text-white text-xs font-mono">{stream.duration}</span>
-                </div>
-
-                {/* Play button overlay */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                    <Play className="w-8 h-8 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {realTimeData.map((platform, index) => (
+              <div key={platform.platform} className="bg-gray-900/70 border border-green-500/30 rounded-lg p-4 backdrop-blur-sm">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-2 h-2 rounded-full ${getStatusColor(platform.status)}`}></div>
+                    <span className="text-green-400 font-bold">{platform.platform.toUpperCase()}</span>
                   </div>
+                  <span className={`text-xs px-2 py-1 rounded ${getStatusColor(platform.status)} bg-gray-800/50`}>
+                    {platform.status}
+                  </span>
                 </div>
-              </div>
 
-              <div className="p-4">
-                <div className="flex items-center space-x-2 mb-2">
-                  <div className={`px-2 py-1 rounded text-xs font-medium text-white bg-gradient-to-r ${getPlatformColor(stream.platform)}`}>
-                    {stream.platform}
-                  </div>
-                  {stream.game && (
-                    <span className="text-gray-400 text-xs">{stream.game}</span>
-                  )}
-                </div>
-                
-                <h3 className="text-white font-semibold mb-2 group-hover:text-purple-200 transition-colors">
-                  {stream.title}
-                </h3>
-                
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3 text-sm text-gray-400">
-                    <div className="flex items-center space-x-1">
-                      <Users className="w-4 h-4" />
-                      <span>{formatNumber(stream.viewers)} watching</span>
-                    </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-green-400/70 text-sm">
+                      {platform.platform === 'Twitch' ? 'VIEWERS' : 
+                       platform.platform === 'Spotify' ? 'LISTENERS' : 'FOLLOWERS'}:
+                    </span>
+                    <span className="text-green-400 font-bold">{platform.viewers || platform.subscribers || platform.followers || platform.listeners}</span>
                   </div>
                   
-                  <button className="flex items-center space-x-1 bg-purple-500/20 hover:bg-purple-500/30 px-3 py-1 rounded-lg transition-colors text-sm text-purple-300">
-                    <span>Watch</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </button>
+                  <div className="flex justify-between items-center">
+                    <span className="text-green-400/70 text-sm">TREND:</span>
+                    <span className="text-green-400 font-bold">{platform.trend}</span>
+                  </div>
+
+                  {/* Activity Graph Simulation */}
+                  <div className="mt-3 h-8 bg-gray-800/50 rounded overflow-hidden relative">
+                    <div className="flex items-end h-full space-x-0.5 px-1">
+                      {Array(20).fill(0).map((_, i) => (
+                        <div
+                          key={i}
+                          className="bg-green-400/60 flex-1 animate-pulse"
+                          style={{ 
+                            height: `${Math.random() * 100}%`,
+                            animationDelay: `${i * 0.1}s`
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </EnhancedCard>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
 
-      {/* Recent Updates Feed */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white">Recent Updates</h2>
-          <div className="flex items-center space-x-2">
-            <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
-              <Search className="w-4 h-4 text-gray-400 hover:text-white" />
-            </button>
-            <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
-              <Filter className="w-4 h-4 text-gray-400 hover:text-white" />
-            </button>
+          {/* Command Terminal */}
+          <div className="bg-gray-900/90 border border-green-500/30 rounded-lg overflow-hidden backdrop-blur-sm">
+            <div className="bg-gray-800/50 px-4 py-2 border-b border-green-500/30 flex items-center space-x-2">
+              <Terminal className="w-4 h-4 text-green-400" />
+              <span className="text-green-400 font-bold">[ACTIVITY_LOG]</span>
+              <div className="flex space-x-1 ml-auto">
+                <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+              </div>
+            </div>
+            
+            <div className="p-4 space-y-1 max-h-48 overflow-y-auto font-mono text-xs">
+              {terminalLogs.map((log, index) => (
+                <div key={index} className="flex items-center space-x-3 hover:bg-gray-800/50 px-2 py-1 rounded">
+                  <span className="text-green-400/50">[{log.time}]</span>
+                  <span className={`font-bold ${getLogTypeColor(log.type)}`}>{log.type}</span>
+                  <span className="text-green-400/80">{log.message}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
+        {/* Alert Panel & System Info */}
         <div className="space-y-4">
-          {recentUpdates.map((update) => (
-            <EnhancedCard key={update.id} className="p-6 hover:scale-[1.01] transition-all duration-300">
-              <div className="flex items-start space-x-4">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${getPlatformColor(update.platform)} flex items-center justify-center flex-shrink-0`}>
-                  {update.media === 'audio' && <Music className="w-6 h-6 text-white" />}
-                  {update.media === 'video' && <Video className="w-6 h-6 text-white" />}
-                  {update.media === 'photo' && <Image className="w-6 h-6 text-white" />}
-                  {update.media === 'text' && <MessageCircle className="w-6 h-6 text-white" />}
+          {/* Alert System */}
+          <div className="bg-gray-900/70 border border-green-500/30 rounded-lg backdrop-blur-sm">
+            <div className="px-4 py-3 border-b border-green-500/30 flex items-center space-x-2">
+              <AlertTriangle className="w-4 h-4 text-yellow-400 animate-pulse" />
+              <span className="text-green-400 font-bold">[ALERTS]</span>
+            </div>
+            
+            <div className="p-4 space-y-3">
+              {alerts.map((alert) => (
+                <div key={alert.id} className="bg-gray-800/50 border-l-4 border-l-red-400 p-3 rounded">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-red-400 font-bold text-sm">{alert.title}</span>
+                    <span className="text-green-400/50 text-xs">{alert.time}</span>
+                  </div>
+                  <p className="text-green-400/80 text-xs">{alert.message}</p>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <span className={`text-xs px-2 py-1 rounded-full bg-gradient-to-r ${getPlatformColor(update.platform)} text-white font-medium`}>
-                      {update.platform}
-                    </span>
-                    <span className="text-gray-400 text-xs">{formatTimeAgo(update.timestamp)}</span>
-                    {update.priority === 'high' && (
-                      <div className="flex items-center space-x-1">
-                        <Zap className="w-3 h-3 text-yellow-400" />
-                        <span className="text-xs text-yellow-400 font-medium">TRENDING</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <h3 className="text-white font-semibold text-lg mb-2 hover:text-purple-200 transition-colors cursor-pointer">
-                    {update.title}
-                  </h3>
-
-                  <p className="text-gray-300 text-sm mb-4 line-clamp-2">
-                    {update.description}
-                  </p>
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 text-sm text-gray-400">
-                      {update.engagement.views && (
-                        <div className="flex items-center space-x-1 hover:text-white transition-colors cursor-pointer">
-                          <Eye className="w-4 h-4" />
-                          <span>{formatNumber(update.engagement.views)}</span>
-                        </div>
-                      )}
-                      {update.engagement.plays && (
-                        <div className="flex items-center space-x-1 hover:text-white transition-colors cursor-pointer">
-                          <Play className="w-4 h-4" />
-                          <span>{formatNumber(update.engagement.plays)}</span>
-                        </div>
-                      )}
-                      <div className="flex items-center space-x-1 hover:text-red-400 transition-colors cursor-pointer">
-                        <Heart className="w-4 h-4" />
-                        <span>{formatNumber(update.engagement.likes)}</span>
-                      </div>
-                      <div className="flex items-center space-x-1 hover:text-blue-400 transition-colors cursor-pointer">
-                        <MessageCircle className="w-4 h-4" />
-                        <span>{formatNumber(update.engagement.comments || update.engagement.replies || 0)}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
-                        <Share2 className="w-4 h-4 text-gray-400 hover:text-white" />
-                      </button>
-                      <button className="flex items-center space-x-1 bg-white/10 hover:bg-white/20 px-3 py-1 rounded-lg transition-colors text-sm">
-                        <span>View</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
+          {/* Data Visualization Panel */}
+          <div className="bg-gray-900/70 border border-green-500/30 rounded-lg backdrop-blur-sm">
+            <div className="px-4 py-3 border-b border-green-500/30 flex items-center space-x-2">
+              <BarChart3 className="w-4 h-4 text-green-400" />
+              <span className="text-green-400 font-bold">[ANALYTICS]</span>
+            </div>
+            
+            <div className="p-4 space-y-4">
+              <div className="grid grid-cols-2 gap-4 text-center">
+                <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="text-2xl font-bold text-green-400">1.2M</div>
+                  <div className="text-xs text-green-400/70">TOTAL REACH</div>
+                </div>
+                <div className="bg-gray-800/50 p-3 rounded">
+                  <div className="text-2xl font-bold text-green-400">24</div>
+                  <div className="text-xs text-green-400/70">LIVE FEEDS</div>
                 </div>
               </div>
-            </EnhancedCard>
-          ))}
+
+              {/* Mini Network Graph */}
+              <div className="bg-gray-800/50 rounded p-3">
+                <div className="text-xs text-green-400/70 mb-2">NETWORK TOPOLOGY</div>
+                <div className="grid grid-cols-3 gap-2">
+                  {Array(9).fill(0).map((_, i) => (
+                    <div key={i} className="aspect-square bg-green-400/20 rounded flex items-center justify-center">
+                      <div className={`w-2 h-2 rounded-full ${Math.random() > 0.5 ? 'bg-green-400 animate-pulse' : 'bg-gray-600'}`} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="bg-gray-900/70 border border-green-500/30 rounded-lg backdrop-blur-sm">
+            <div className="px-4 py-3 border-b border-green-500/30 flex items-center space-x-2">
+              <Zap className="w-4 h-4 text-green-400" />
+              <span className="text-green-400 font-bold">[QUICK_ACTIONS]</span>
+            </div>
+            
+            <div className="p-4 grid grid-cols-2 gap-2">
+              <button className="bg-gray-800/50 hover:bg-gray-700/50 border border-green-500/30 rounded p-2 text-xs text-green-400 transition-colors">
+                DEPLOY
+              </button>
+              <button className="bg-gray-800/50 hover:bg-gray-700/50 border border-green-500/30 rounded p-2 text-xs text-green-400 transition-colors">
+                RESTART
+              </button>
+              <button className="bg-gray-800/50 hover:bg-gray-700/50 border border-green-500/30 rounded p-2 text-xs text-green-400 transition-colors">
+                BACKUP
+              </button>
+              <button className="bg-gray-800/50 hover:bg-gray-700/50 border border-green-500/30 rounded p-2 text-xs text-green-400 transition-colors">
+                MONITOR
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Activity Summary */}
-      <EnhancedCard className="p-6 bg-gradient-to-r from-gray-800/80 to-gray-900/80">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">Today's Activity</h3>
-          <div className="flex items-center space-x-2 text-green-400">
-            <Activity className="w-4 h-4" />
-            <span className="text-sm font-medium">All Systems Active</span>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-400">24</div>
-            <div className="text-xs text-gray-400">Total Updates</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-pink-400">1.2M</div>
-            <div className="text-xs text-gray-400">Total Reach</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-400">8</div>
-            <div className="text-xs text-gray-400">Platforms</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-green-400">95%</div>
-            <div className="text-xs text-gray-400">Engagement Rate</div>
-          </div>
-        </div>
-      </EnhancedCard>
+      <style jsx>{`
+        @keyframes matrix-scroll {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(20px); }
+        }
+      `}</style>
     </div>
   );
 }
